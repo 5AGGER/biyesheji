@@ -1,3 +1,21 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
@@ -43,8 +61,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-
-/**
+/*
   * @brief  The application entry point.
   * @retval int
   */
@@ -65,7 +82,6 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
-
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
@@ -76,17 +92,17 @@ int main(void)
   MX_USART1_UART_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
- while (1)
+	W25Q128_ID = W25Q128_ReadID();
+  /* Read the W25Q128 chip ID and print it to the UART */
+  printf("\nW25Q128_ID=0x%X\n", W25Q128_ID);
+  while (1)
   {
-    /* Read the W25Q128 chip ID and print it to the UART */
-    W25Q128_ID = W25Q128_ReadID();
-    printf("\nW25Q128_ID=0x%X\n", W25Q128_ID);
-    
-    /* Wait for 500ms before reading the ID again */
+		/* Wait for 500ms before reading the ID again */
     HAL_Delay(500);
   }
 
   /* USER CODE END 2 */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   {
@@ -139,6 +155,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
