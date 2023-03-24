@@ -25,12 +25,11 @@
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
+
 /* SPI1 init function */
 void MX_SPI1_Init(void)
 {
-   
-	 
-	 
+
   /* USER CODE BEGIN SPI1_Init 0 */
 
   /* USER CODE END SPI1_Init 0 */
@@ -54,7 +53,7 @@ void MX_SPI1_Init(void)
   {
     Error_Handler();
   }
-   /* USER CODE BEGIN SPI1_Init 2 */
+  /* USER CODE BEGIN SPI1_Init 2 */
   uint8_t txData = 0xFF;
   uint8_t rxData;
   if (HAL_SPI_TransmitReceive(&hspi1, &txData, &rxData, 1, HAL_MAX_DELAY) != HAL_OK)
@@ -62,17 +61,8 @@ void MX_SPI1_Init(void)
     Error_Handler();
   }
   /* USER CODE END SPI1_Init 2 */
-}
-  uint8_t SPI1_ReadWriteByte(uint8_t TxData)
-{			 	
-  uint8_t RxData;
-  if (HAL_SPI_TransmitReceive(&hspi1, &TxData, &RxData, 1, HAL_MAX_DELAY) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  return RxData;
-}
 
+}
 
 void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
 {
@@ -131,7 +121,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
   /* USER CODE BEGIN SPI1_MspDeInit 1 */
 
   /* USER CODE END SPI1_MspDeInit 1 */
-  }	
+  }
 }
 
 /* USER CODE BEGIN 1 */
