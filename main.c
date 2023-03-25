@@ -23,6 +23,8 @@
 #include "usart.h"
 #include "gpio.h"
 #include "W25Q128.h"
+#include <stdio.h>
+#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -54,7 +56,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
-
+uint16_t W25Q128_ID=0;
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
