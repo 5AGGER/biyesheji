@@ -1,7 +1,8 @@
 #include "W25Q128.h"
-#include "SPI.h"
+#include "spi.h"
 
 extern SPI_HandleTypeDef hspi1;	
+
 
 uint32_t read_W25Q128_ID(void)
 {
@@ -15,4 +16,5 @@ uint32_t read_W25Q128_ID(void)
 
   uint32_t result = (id[0] << 16) | (id[1] << 8) | id[2];
   return result;
+
 }
