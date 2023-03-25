@@ -89,10 +89,10 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+	MX_SPI1_Init();
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
-  MX_SPI1_Init();
 	
 	/* USER CODE BEGIN 2 */
   uint32_t w25q128_id = read_W25Q128_ID();
@@ -102,7 +102,14 @@ int main(void)
 
   while (1)
   {
-    // ??????????,????
+		uint32_t flash_id = read_W25Q128_ID();
+    if (flash_id == 0xEF4018) {
+      // ID is correct, do something
+    } else {
+      // ID is incorrect, handle the error
+    }
+    HAL_Delay(500);
+    //
   }
 }
   /* USER CODE END 2 */
