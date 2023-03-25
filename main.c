@@ -69,7 +69,8 @@ uint16_t W25Q128_ID=0;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  uint8_t read_buffer[W25Q128_PAGE_SIZE];
+	
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -99,6 +100,11 @@ int main(void)
   char msg[64];
   sprintf(msg, "W25Q128 ID: 0x%06X\r\n", w25q128_id);
   HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
+	
+	uint8_t write_buffer[W25Q128_PAGE_SIZE] = {0};
+	W25Q128_EraseSector(&hspi1, 0x000000);
+  W25Q128_WritePage(&hspi1, write_buffer, 0x000000, W25Q128_PAGE_SIZE);
+  W25Q128_ReadPage(&hspi1, read_buffer, 0x000000, W25Q128_PAGE_SIZE);
 
   while (1)
   {
@@ -111,6 +117,7 @@ int main(void)
     HAL_Delay(500);
     //
   }
+	
 }
   /* USER CODE END 2 */
 
