@@ -18,3 +18,63 @@ uint32_t read_W25Q128_ID(void)
   return result;
 
 }
+
+//next
+void W25Q128_WaitForWriteEnd(SPI_HandleTypeDef *hspi) {
+  uint8_t status = 0;
+  uint8_t cmd[] = {W25Q128_CMD_READ_STATUS_REG1};
+
+  do {
+    HAL_SPI_Transmit(hspi, cmd, 1, HAL_MAX_DELAY);
+    HAL_SPI_Receive(hspi, &status, 1, HAL_MAX_DELAY);
+  } while (status & W25Q128_WIP_FLAG);
+}
+  HAL_StatusTypeDef W25Q128_EraseSector(SPI_HandleTypeDef *hspi, uint32_t address) {
+  uint8_t cmd[4] = {W25Q128_CMD_WRITE_ENABLE};
+  HAL_StatusTypeDef status;
+
+  status = HAL_SPI_Transmit(hspi, cmd, 1, HAL_MAX_DELAY);
+  if (status != HAL_OK) return status;
+
+  cmd[0] = W25Q128_CMD_SECTOR_ERASE;
+  cmd[1] = (address >> 16) & 0xFF;
+  cmd[2] = (address >> 8) & 0xFF;
+  cmd[3] = address & 0xFF;
+
+  status = HAL_SPI_Transmit(hspi, cmd, 4, HAL_MAX_DELAY);
+  if (status != HAL_OK) return status;
+
+  W25Q128_WaitForWriteEnd(hspi);
+  return HAL_OK;
+}
+	HAL_StatusTypeDef W25Q128_WritePage(SPI_HandleTypeDef *hspi, uint8_t *buffer, uint32_t address, uint16_t size) {
+  uint8_t cmd[4] = {W25Q128_CMD_WRITE_ENABLE};
+  HAL_StatusTypeDef status;
+
+  status = HAL_SPI_Transmit(hspi, cmd, 1, HAL_MAX_DELAY);
+  if (status != HAL_OK) return status;
+
+  cmd[0] = W25Q128_CMD_PAGE_PROGRAM;
+  cmd[1] = (address >> 16) & 0xFF;
+  cmd[2] = (address >> 8) & 0xFF;
+  cmd[3] = address & 0xFF;
+
+  status = HAL_SPI_Transmit(hspi, cmd, 4, HAL_MAX_DELAY);
+  if (status != HAL_OK) return status;
+
+  status = HAL_SPI_Transmit(hspi, buffer, size, HAL_MAX_DELAY);
+  if (status != HAL_OK) return status;
+
+  W25Q128_WaitForWriteEnd(hspi);
+  return HAL_OK;
+}
+	HAL_StatusTypeDef W25Q128_ReadPage(SPI_HandleTypeDef *hspi, uint8_t *buffer, uint32_t address, uint16_t size) {
+  uint8_t cmd[4] = {W25Q128_CMD_READ_DATA, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF};
+  HAL_StatusTypeDef status;
+
+  status = HAL_SPI_Transmit(hspi, cmd, 4, HAL_MAX_DELAY);
+  if (status != HAL_OK) return status;
+
+  status = HAL_SPI_Receive(hspi, buffer, size, HAL_MAX_DELAY);
+  return status;
+}
